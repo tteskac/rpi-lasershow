@@ -145,7 +145,7 @@ int ADCDACPi::read_adc_raw(int channel, int mode) {
 	spi.bits_per_word = 8;
 
 
-	int ret = ioctl(adc, SPI_IOC_MESSAGE(1), &spi);
+	ioctl(adc, SPI_IOC_MESSAGE(1), &spi);
 
 	return (((adcrx[1] & 0x0F) << 8) + (adcrx[2]));
 
@@ -188,7 +188,10 @@ void ADCDACPi::set_dac_raw(uint16_t raw, int channel) {
 	dactx[0] = (((raw >> 8) & 0xff) | (channel - 1) << 7 | 0x1 << 5 | 1 << 4);
 
 	if (dacgain == 2) {
+		#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wsequence-point"
         dactx[0] = (dactx[0] &= ~(1 << 5));
+		#pragma GCC diagnostic pop
     }
 
 	struct spi_ioc_transfer tr;
@@ -203,7 +206,7 @@ void ADCDACPi::set_dac_raw(uint16_t raw, int channel) {
 	tr.cs_change = 0;
 
 	// Write data
-	int ret = ioctl(dac, SPI_IOC_MESSAGE(1), &tr);
+	ioctl(dac, SPI_IOC_MESSAGE(1), &tr);
 	return;
 		
 }

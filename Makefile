@@ -12,7 +12,7 @@ TARGET = lasershow
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp ABE_ADCDACPi.cpp
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp ABE_ADCDACPi.cpp IldaReader.cpp Frame.cpp FrameData.cpp Points.cpp -lwiringPi
 
 clean:
 	$(RM) $(TARGET)
