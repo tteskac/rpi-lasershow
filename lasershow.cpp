@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdexcept>
@@ -13,6 +14,8 @@
 
 using namespace std;
 using namespace ABElectronics_CPP_Libraries;
+
+void onInterrupt(int);
 
 int main(int argc, char **argv) {
 
@@ -50,6 +53,9 @@ int main(int argc, char **argv) {
         return(1);
     }
 
+    // Subscribe program to exit/interrupt signal.
+    signal(SIGINT, onInterrupt);
+
     // Start the scanner loop with the current time.
     std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
     while(true) {
@@ -57,8 +63,8 @@ int main(int argc, char **argv) {
         // Exit if no points found.
         if (points.size == 0) break;
 
-        // Move galvos to x,y position.
-        adcdac.set_dac_raw(points.store[points.index*3],1);
+        // Move galvos to x,y position. (4096 is to invert horizontally)
+        adcdac.set_dac_raw(4096-points.store[points.index*3],1);
         adcdac.set_dac_raw(points.store[(points.index*3)+1],2);
         
         // Turn on/off laser diode.
@@ -83,4 +89,12 @@ int main(int argc, char **argv) {
     ildaReader.closeFile();
     adcdac.close_dac();
     return (0);
+}
+
+// Function that is called when program needs to be terminated. 
+void onInterrupt(int) {
+    printf("Turn off laser diode.\n");
+    digitalWrite(0, LOW);
+    printf("Program was interrupted.\n");
+    exit(1); 
 }
