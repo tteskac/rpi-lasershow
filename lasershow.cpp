@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     // Read arguments.
     int pointDelay = atoi(argv[1]);
     string fileName = argv[2];
-    double frameDuration = 0.033; //seconds.
+    double frameDuration = 0.033; // ~30fps (1/30=0.033..).
 
     // Setup hardware communication stuff.
     wiringPiSetup();

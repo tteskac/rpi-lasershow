@@ -1,6 +1,6 @@
 # LaserShow on Raspberry Pi Zero
 
-This is the second version of my lasershow project. I was using Arduino before but since I started working with linux and RaspberryPi a lot I wanted to move away from Arduino.
+This is the second version of my lasershow project. I was using Arduino before but since I started working with linux and RaspberryPi I wanted to move away from Arduino as it is much simpler to write code for me on linux (oh, and of course, multithreading!).
 
 ![Screenshot](https://raw.githubusercontent.com/tteskac/rpi-lasershow/master/laserpi.jpg)
 
@@ -11,9 +11,9 @@ This is the second version of my lasershow project. I was using Arduino before b
 
 ### Hardware
 - Raspberry Pi Zero
-- MCP4822 DAC. I created my own board for that but you can use [ADC-DAC Pi Zero](https://pinout.xyz/pinout/adc_dac_pi_zero) as well.
+- MCP4822 DAC. I created my own board for that but you can use e.g. [ADC-DAC Pi Zero](https://pinout.xyz/pinout/adc_dac_pi_zero) as well.
 - galvo kit (2 galvos + controller board)
-- laser diode (green)
+- laser diode (e.g. green)
 
 # Instalation
 1) Install WiringPi: http://wiringpi.com/download-and-install/
@@ -28,14 +28,22 @@ Btw#2, this project currently supports only ILDA type 1, so make sure you export
 ## Wiring
 The code is using SPI for communication with DAC and one GPIO for laser diode:
 ```
-MOSI:  Header pin 19
-SCK:     Header pin 23
-CS:       Header pin 26
-
-LASER ON: Header pin 11 (WiringPi pin num 0)
-
-+5V:    Header pin 2
-GND:   Header pin 6
+/-----------------------------------------\
+| MCP4822       | RASPBERRY ZERO          |
+|-----------------------------------------|
+| PIN 1 (Vdd)   | +5V pin, e.g. 2         |
+| PIN 2 (CS)    | PIN 26 (CE1)            |
+| PIN 3 (SCK)   | PIN 23 (SCK)            |
+| PIN 4 (SDI)   | PIN 19 (MOSI)           |
+| PIN 5 (LDAC)  | GND pin, e.g. 20        |
+| PIN 7 (Vss)   | GND pin, e.g. 6         |
+|-----------------------------------------|
+| PIN 8 (VoutA) | To galvo X              |
+| PIN 6 (VoutB) | To galvo Y              |
+| LASER ON      | PIN 11 (WiringPi pin 0) |
+\-----------------------------------------/
 ```
+
+![DAC](https://raw.githubusercontent.com/tteskac/rpi-lasershow/master/mcp48x2.png)
 
 ![Rpi pinout](https://docs.particle.io/assets/images/pi-pinout-diagram-01.png)
