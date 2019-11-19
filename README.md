@@ -23,7 +23,7 @@ This is the second version of my lasershow project. I was using Arduino before b
 5) Have fun!
 
 Btw, to create own ILDA files I like to use [Laserworld Showeditor](https://www.showeditor.com/en/features/showeditor-free.html) which has a free version with limited features (but enough for making ILDA files). It's a bit buggy I know but as soon as you get over it you are just fine :) If you know about good open source / free lasershow editor out there that has ILDA export functionality let me know!
-Btw#2, this project currently supports only ILDA type 1, so make sure you export correct version.
+Btw#2, this project currently supports only ILDA Format 1 (2D Coordinates with Indexed Color) and Format 5 (2D Coordinates with True Colors), so make sure you export correct version.
 
 ## Wiring
 The code is using SPI for communication with DAC and one GPIO for laser diode:

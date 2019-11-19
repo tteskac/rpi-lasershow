@@ -36,6 +36,21 @@ int main(int argc, char **argv)
 	string fileName = argv[2];
 	double frameDuration = 0.033; // ~30fps (1/30=0.033..).
 
+	// Try to open provided file.
+	Points points;
+	IldaReader ildaReader;
+	if (ildaReader.openFile(fileName))
+	{
+		printf("Provided file is a valid ILDA file, format %d\n", ildaReader.format);
+		ildaReader.getNextFrame(&points);
+		printf("Points loaded in the first frame: %d\n", points.size);
+	}
+	else
+	{
+		printf("Error opening ILDA file.\n");
+		return 1;
+	}
+
 	// Setup hardware communication stuff.
 	wiringPiSetup();
 	ADCDACPi adcdac;
@@ -47,25 +62,10 @@ int main(int argc, char **argv)
 	// Set the DAC gain to 1 which will give a voltage range of 0 to 2.048V.
 	adcdac.set_dac_gain(1);
 
-	// Setup ILDA reader.
-	Points points;
-	IldaReader ildaReader;
-	if (ildaReader.readFile(fileName))
-	{
-		printf("Provided file is a valid ILDA file.\n");
-		ildaReader.getNextFrame(&points);
-		printf("Points loaded in first frame: %d\n", points.size);
-	}
-	else
-	{
-		printf("Error opening ILDA file.\n");
-		return 1;
-	}
-
 	// Subscribe program to exit/interrupt signal.
 	signal(SIGINT, onInterrupt);
 
-	// Start server.
+	// Start server for receiving commands.
 	std::thread serverThread(serverTask);
 
 	// Start the scanner loop with the current time.
@@ -104,11 +104,11 @@ int main(int argc, char **argv)
 	}
 
 	// Cleanup and exit.
-	printf("Cleanup...");
+	printf("Cleanup...\n");
 	digitalWrite(0, LOW);
 	ildaReader.closeFile();
 	adcdac.close_dac();
-	printf("Exit.");
+	printf("Exit.\n");
 	return 0;
 }
 
@@ -122,7 +122,7 @@ void onInterrupt(int)
 // Starts thread with socket listener.
 void serverTask()
 {
-	printf("Starting server thread...");
+	printf("Starting server thread...\n");
 	Communication comm;
 	comm.start();
 }
