@@ -1,6 +1,6 @@
 # LaserShow on Raspberry Pi Zero
 
-This is the second version of my lasershow project. I was using Arduino before but since I started working with linux and RaspberryPi I wanted to move away from Arduino as it is much simpler to write code for me on linux (oh, and of course, multithreading!).
+This is the second version of my lasershow project. I was using Arduino before but since I started working with linux and RaspberryPi I wanted to move away from Arduino as it is much simpler to write code for me on linux (oh, and of course, multithreading!). Originally based on this project: https://www.instructables.com/id/Arduino-Laser-Show-With-Real-Galvos/
 
 ![Screenshot](https://raw.githubusercontent.com/tteskac/rpi-lasershow/master/laserpi.jpg)
 
